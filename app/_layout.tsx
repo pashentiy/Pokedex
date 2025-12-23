@@ -6,7 +6,7 @@ import * as SplashScreen from "expo-splash-screen";
 import { useEffect } from "react";
 import "react-native-reanimated";
 
-import { useColorScheme } from "@/components/useColorScheme";
+import { ThemeProvider as CustomThemeProvider, useTheme } from "@/components/ThemeContext";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
 export {
@@ -47,13 +47,15 @@ export default function RootLayout() {
 
   return (
     <QueryClientProvider client={queryClinet}>
-      <RootLayoutNav />
+      <CustomThemeProvider>
+        <RootLayoutNav />
+      </CustomThemeProvider>
     </QueryClientProvider>
   );
 }
 
 function RootLayoutNav() {
-  const colorScheme = useColorScheme();
+  const { colorScheme } = useTheme();
 
   return (
     <ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
