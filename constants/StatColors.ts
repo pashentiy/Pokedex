@@ -1,0 +1,9 @@
+export const STAT_COLORS = {
+  HP: "#FF5959",
+  ATTACK: "#F5AC78",
+  DEFENSE: "#FAE078",
+  SPECIAL_ATTACK: "#9DB7F5",
+  SPECIAL_DEFENSE: "#A7DB8D",
+  SPEED: "#FA92B2",
+  TOTAL: "#7C538C",
+} as const;
