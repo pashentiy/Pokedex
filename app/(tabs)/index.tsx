@@ -1,9 +1,9 @@
 import { FlatList, StyleSheet } from "react-native";
 
-import EditScreenInfo from "@/components/EditScreenInfo";
+import { PokemonCard } from "@/components/pokemon/PokemonCard";
 import { PokemonError } from "@/components/pokemon/PokemonError";
 import { PokemonLoading } from "@/components/pokemon/PokemonLoading";
-import { Text, View } from "@/components/Themed";
+import { View } from "@/components/Themed";
 import { usePokemons } from "@/hooks/usePokemons";
 
 export default function TabOneScreen() {
@@ -22,12 +22,11 @@ export default function TabOneScreen() {
     <View style={styles.container}>
       <FlatList
         data={data}
-        keyExtractor={(item) => item.name}
-        renderItem={({ item }) => <Text>{item.name}</Text>}
+        keyExtractor={(item) => item.id.toString()}
+        numColumns={3}
+        showsVerticalScrollIndicator={false}
+        renderItem={({ item }) => <PokemonCard pokemon={item} />}
       />
-      <Text style={styles.title}>Tab One</Text>
-      <View style={styles.separator} lightColor="#eee" darkColor="rgba(255,255,255,0.1)" />
-      <EditScreenInfo path="app/(tabs)/index.tsx" />
     </View>
   );
 }
@@ -35,8 +34,6 @@ export default function TabOneScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    alignItems: "center",
-    justifyContent: "center",
   },
   title: {
     fontSize: 20,
