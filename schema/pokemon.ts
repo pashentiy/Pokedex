@@ -1,6 +1,7 @@
 import { z } from "zod";
 
 export const PokemonSchema = z.object({
+  id: z.number(),
   number: z.number(),
   name: z.string(),
   type_one: z.string(),
@@ -16,8 +17,10 @@ export const PokemonSchema = z.object({
   legendary: z.boolean(),
 });
 
+export const PokemonWithImageSchema = PokemonSchema.extend({ imageUrl: z.string() });
 export const PokemonsSchema = z.array(PokemonSchema);
+export const PokemonsWithImageSchema = z.array(PokemonWithImageSchema);
 
-export type Pokemon = z.infer<typeof PokemonSchema>;
+export type PokemonWithImage = z.infer<typeof PokemonWithImageSchema>;
 export type Pokemons = z.infer<typeof PokemonsSchema>;
-export type PokemonWithImage = Pokemon & { imageUrl: string };
+export type PokemonsWithImage = z.infer<typeof PokemonsWithImageSchema>;
