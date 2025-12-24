@@ -5,14 +5,12 @@ import { InfoRow } from "@/components/pokemon/InfoRow";
 import { StatBar } from "@/components/pokemon/StatBar";
 import { Text, View } from "@/components/Themed";
 import { STAT_COLORS } from "@/constants/StatColors";
-import { usePokemons } from "@/hooks/usePokemons";
+import { usePokemonById } from "@/hooks/usePokemonById";
 import { getPokemonTypeColor } from "@/utils/pokemonTypeColors";
 
 const PokemonDetails = () => {
   const { id } = useLocalSearchParams<{ id: string }>();
-  const { data } = usePokemons();
-
-  const pokemon = data?.find((p) => p.id.toString() === id);
+  const pokemon = usePokemonById(id);
 
   if (!pokemon) {
     return (
