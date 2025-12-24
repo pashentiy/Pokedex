@@ -21,6 +21,22 @@ export const PokemonWithImageSchema = PokemonSchema.extend({ imageUrl: z.string(
 export const PokemonsSchema = z.array(PokemonSchema);
 export const PokemonsWithImageSchema = z.array(PokemonWithImageSchema);
 
+export const PaginationSchema = z.object({
+  page: z.number(),
+  limit: z.number(),
+  total: z.number(),
+  totalPages: z.number(),
+  hasMore: z.boolean(),
+});
+
+export const PaginatedPokemonsResponseSchema = z.object({
+  data: PokemonsSchema,
+  pagination: PaginationSchema,
+});
+
 export type PokemonWithImage = z.infer<typeof PokemonWithImageSchema>;
-export type Pokemons = z.infer<typeof PokemonsSchema>;
 export type PokemonsWithImage = z.infer<typeof PokemonsWithImageSchema>;
+export type PaginatedPokemonsWithImageResponse = {
+  data: PokemonsWithImage;
+  pagination: z.infer<typeof PaginationSchema>;
+};
