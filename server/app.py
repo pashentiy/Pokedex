@@ -44,9 +44,17 @@ def get_pokemon_paginated():
     order = request.args.get("order", "asc").lower()
     if order not in ("asc", "desc"):
         order = "asc"
+    
+    type_filter = request.args.get("type", None)
 
     load_cache()
     sorted_pokemon = _cache["desc"] if order == "desc" else _cache["asc"]
+
+    if type_filter:
+        sorted_pokemon = [
+            p for p in sorted_pokemon 
+            if p["type_one"] == type_filter or p["type_two"] == type_filter
+        ]
 
     total = len(sorted_pokemon)
     start_index = (page - 1) * limit
@@ -62,9 +70,21 @@ def get_pokemon_paginated():
             "total": total,
             "totalPages": (total + limit - 1) // limit,
             "hasMore": end_index < total,
-            "order": order
+            "order": order,
+            "type": type_filter
         }
     })
+
+
+@app.route('/types')
+def get_types():
+    load_cache()
+    types = set()
+    for pokemon in _cache["data"]:
+        types.add(pokemon["type_one"])
+        if pokemon["type_two"]:
+            types.add(pokemon["type_two"])
+    return jsonify({"types": sorted(list(types))})
 
 
 if __name__=='__main__':
