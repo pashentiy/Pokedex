@@ -1,10 +1,11 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
-import { PokemonListOrder } from "@/types";
+import { PokemonListOrder, PokemonType } from "@/types";
 
 const SCROLL_POSITION_KEY = "@pokedex_scroll_position";
 const PAGE_KEY = "@pokedex_last_page";
 const ORDER_KEY = "@pokedex_order";
+const TYPE_KEY = "@pokedex_type";
 
 export const saveScrollPosition = async (offset: number): Promise<void> => {
   try {
@@ -73,5 +74,27 @@ export const getOrder = async (): Promise<PokemonListOrder> => {
   } catch (error) {
     console.error("Error getting order:", error);
     return "asc";
+  }
+};
+
+export const saveType = async (type: PokemonType): Promise<void> => {
+  try {
+    if (type === null) {
+      await AsyncStorage.removeItem(TYPE_KEY);
+    } else {
+      await AsyncStorage.setItem(TYPE_KEY, type);
+    }
+  } catch (error) {
+    console.error("Error saving type:", error);
+  }
+};
+
+export const getType = async (): Promise<PokemonType> => {
+  try {
+    const value = await AsyncStorage.getItem(TYPE_KEY);
+    return value as PokemonType;
+  } catch (error) {
+    console.error("Error getting type:", error);
+    return null;
   }
 };
