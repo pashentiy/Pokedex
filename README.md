@@ -1,4 +1,4 @@
-<img width="660" height="1434" alt="IMG_3668" src="https://github.com/user-attachments/assets/de21fc21-2420-4c14-8534-dd0a2f5db796" /># 📱 Pokédex
+<img width="660" height="1434" alt="IMG_3667" src="https://github.com/user-attachments/assets/58fd593c-165d-43c1-b9b0-f01bcb961b9b" /><img width="660" height="1434" alt="IMG_3668" src="https://github.com/user-attachments/assets/ffe0467c-6432-4ec6-a9b8-71c4eeeb04ef" /><img width="660" height="1434" alt="IMG_3668" src="https://github.com/user-attachments/assets/de21fc21-2420-4c14-8534-dd0a2f5db796" /># 📱 Pokédex
 
 A simple and fast **Pokédex mobile app** with 800+ Pokémon.
 
@@ -8,8 +8,12 @@ Built with **Expo**, **React Native**, **TypeScript**, and a **Flask** backend.
 
 ---
 # 📸 Pokédex
-![App Screenshot](<img width="660" height="1434" alt="IMG_3668" src="https://github.com/user-attachments/assets/e8d939cc-30f0-49f9-9da2-158657293a96" />
-)
+<p align="center">
+  <img src="https://github.com/user-attachments/assets/83963528-281a-458c-9c5d-9d2029492b55" width="220" />
+  <img src="https://github.com/user-attachments/assets/d7104139-2f93-4ba7-841d-144e95826c9b" width="220" />
+  <img src="https://github.com/user-attachments/assets/0033aa8e-da71-4251-8d7a-b905962162e4" width="220" />
+  <img src="https://github.com/user-attachments/assets/a609f3dc-3bc2-4757-925c-d1bdd56b7f82" width="220" />
+</p>
 
 ## ✨ Features
 
