@@ -34,10 +34,10 @@ export default function TabLayout() {
         }}
       />
       <Tabs.Screen
-        name="two"
+        name="caught"
         options={{
-          title: "Captured",
-          tabBarIcon: ({ color }) => <TabBarIcon name="bookmark" color={color} />,
+          title: "My Pokemon",
+          tabBarIcon: ({ color }) => <TabBarIcon name="star" color={color} />,
         }}
       />
     </Tabs>

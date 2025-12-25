@@ -2,6 +2,7 @@ import { Stack, useLocalSearchParams } from "expo-router";
 import { useEffect, useState } from "react";
 import { Image, ScrollView, StyleSheet } from "react-native";
 
+import { CatchButton } from "@/components/CatchButton";
 import { InfoRow } from "@/components/pokemon/InfoRow";
 import { StatBar } from "@/components/pokemon/StatBar";
 import { Text, View } from "@/components/Themed";
@@ -74,6 +75,10 @@ const PokemonDetails = () => {
                 <Text style={styles.typeText}>{pokemon.type_two}</Text>
               </View>
             )}
+          </View>
+
+          <View style={styles.catchButtonContainer}>
+            <CatchButton pokemon={pokemon} />
           </View>
 
           <View style={styles.infoSection}>
@@ -176,6 +181,10 @@ const styles = StyleSheet.create({
     fontSize: 14,
     fontWeight: "600",
     textTransform: "uppercase",
+  },
+  catchButtonContainer: {
+    alignItems: "center",
+    marginBottom: 30,
   },
   infoSection: {
     marginBottom: 30,

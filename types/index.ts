@@ -21,3 +21,12 @@ export type PokemonTypeName =
   | "Water";
 
 export type PokemonType = PokemonTypeName | null;
+
+export interface CaughtPokemon {
+  id: number;
+  name: string;
+  number: number;
+  imageUrl: string;
+  caughtAt: string;
+  contactId?: string;
+}
