@@ -9,8 +9,11 @@ DB_PATH = "pokemon_db.json"
 
 _cache = {
     "data": None,
-    "mtime": None
+    "mtime": None,
+    "asc": None,
+    "desc": None,
 }
+
 
 def load_cache(force: bool = False):
     current_mtime = os.path.getmtime(db.DB_PATH)
@@ -18,6 +21,10 @@ def load_cache(force: bool = False):
     if force or _cache["data"] is None or _cache["mtime"] != current_mtime:
         _cache["data"] = db.get()
         _cache["mtime"] = current_mtime
+
+        asc = sorted(_cache["data"], key=lambda p: p["number"])
+        _cache["asc"] = asc
+        _cache["desc"] = list(reversed(asc))
 
     return _cache["data"]
 
@@ -33,23 +40,29 @@ def get_icon_url(name:str):
 def get_pokemon_paginated():
     page = int(request.args.get('page', 1))
     limit = int(request.args.get('limit', 30))
-    
-    all_pokemon = load_cache()
-    total = len(all_pokemon)
-    
+
+    order = request.args.get("order", "asc").lower()
+    if order not in ("asc", "desc"):
+        order = "asc"
+
+    load_cache()
+    sorted_pokemon = _cache["desc"] if order == "desc" else _cache["asc"]
+
+    total = len(sorted_pokemon)
     start_index = (page - 1) * limit
     end_index = start_index + limit
-    
-    paginated_data = all_pokemon[start_index:end_index]
-    
+
+    paginated_data = sorted_pokemon[start_index:end_index]
+
     return jsonify({
-        'data': paginated_data,
-        'pagination': {
-            'page': page,
-            'limit': limit,
-            'total': total,
-            'totalPages': (total + limit - 1) // limit,
-            'hasMore': end_index < total
+        "data": paginated_data,
+        "pagination": {
+            "page": page,
+            "limit": limit,
+            "total": total,
+            "totalPages": (total + limit - 1) // limit,
+            "hasMore": end_index < total,
+            "order": order
         }
     })
 
