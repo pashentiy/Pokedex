@@ -1,4 +1,5 @@
 import { Stack, useLocalSearchParams } from "expo-router";
+import { useEffect, useState } from "react";
 import { Image, ScrollView, StyleSheet } from "react-native";
 
 import { InfoRow } from "@/components/pokemon/InfoRow";
@@ -6,11 +7,34 @@ import { StatBar } from "@/components/pokemon/StatBar";
 import { Text, View } from "@/components/Themed";
 import { STAT_COLORS } from "@/constants/StatColors";
 import { usePokemonById } from "@/hooks/usePokemonById";
+import { PokemonListOrder, PokemonType } from "@/types";
 import { getPokemonTypeColor } from "@/utils/pokemonTypeColors";
+import { getOrder, getType } from "@/utils/scrollPersistence";
 
 const PokemonDetails = () => {
   const { id } = useLocalSearchParams<{ id: string }>();
-  const pokemon = usePokemonById(id);
+  const [order, setOrder] = useState<PokemonListOrder>("asc");
+  const [type, setType] = useState<PokemonType>(null);
+  const [isLoaded, setIsLoaded] = useState(false);
+
+  useEffect(() => {
+    (async () => {
+      const [savedOrder, savedType] = await Promise.all([getOrder(), getType()]);
+      setOrder(savedOrder);
+      setType(savedType);
+      setIsLoaded(true);
+    })();
+  }, []);
+
+  const pokemon = usePokemonById(id, order, type);
+
+  if (!isLoaded) {
+    return (
+      <View style={styles.errorContainer}>
+        <Text>Loading...</Text>
+      </View>
+    );
+  }
 
   if (!pokemon) {
     return (
