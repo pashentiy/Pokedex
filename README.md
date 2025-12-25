@@ -1,4 +1,4 @@
-<img width="660" height="1434" alt="IMG_3667" src="https://github.com/user-attachments/assets/58fd593c-165d-43c1-b9b0-f01bcb961b9b" /><img width="660" height="1434" alt="IMG_3668" src="https://github.com/user-attachments/assets/ffe0467c-6432-4ec6-a9b8-71c4eeeb04ef" /><img width="660" height="1434" alt="IMG_3668" src="https://github.com/user-attachments/assets/de21fc21-2420-4c14-8534-dd0a2f5db796" /># 📱 Pokédex
+# 📱 Pokédex
 
 A simple and fast **Pokédex mobile app** with 800+ Pokémon.
 
