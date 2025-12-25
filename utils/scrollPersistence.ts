@@ -1,7 +1,10 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
+import { PokemonListOrder } from "@/types";
+
 const SCROLL_POSITION_KEY = "@pokedex_scroll_position";
 const PAGE_KEY = "@pokedex_last_page";
+const ORDER_KEY = "@pokedex_order";
 
 export const saveScrollPosition = async (offset: number): Promise<void> => {
   try {
@@ -36,5 +39,39 @@ export const getLastPage = async (): Promise<number> => {
   } catch (error) {
     console.error("Error getting last page:", error);
     return 1;
+  }
+};
+
+export const removeScrollPosition = async (): Promise<void> => {
+  try {
+    await AsyncStorage.removeItem(SCROLL_POSITION_KEY);
+  } catch (error) {
+    console.error("Error removing scroll position:", error);
+  }
+};
+
+export const removeLastPage = async (): Promise<void> => {
+  try {
+    await AsyncStorage.removeItem(PAGE_KEY);
+  } catch (error) {
+    console.error("Error removing last page:", error);
+  }
+};
+
+export const saveOrder = async (order: PokemonListOrder): Promise<void> => {
+  try {
+    await AsyncStorage.setItem(ORDER_KEY, order);
+  } catch (error) {
+    console.error("Error saving order:", error);
+  }
+};
+
+export const getOrder = async (): Promise<PokemonListOrder> => {
+  try {
+    const value = await AsyncStorage.getItem(ORDER_KEY);
+    return value === "desc" ? "desc" : "asc";
+  } catch (error) {
+    console.error("Error getting order:", error);
+    return "asc";
   }
 };
