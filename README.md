@@ -1,4 +1,4 @@
-# 📱 Pokédex
+<img width="660" height="1434" alt="IMG_3668" src="https://github.com/user-attachments/assets/de21fc21-2420-4c14-8534-dd0a2f5db796" /># 📱 Pokédex
 
 A simple and fast **Pokédex mobile app** with 800+ Pokémon.
 
@@ -7,6 +7,9 @@ Browse Pokémon with infinite scroll, filter by type, sort the list, switch betw
 Built with **Expo**, **React Native**, **TypeScript**, and a **Flask** backend.
 
 ---
+# 📸 Pokédex
+![App Screenshot](<img width="660" height="1434" alt="IMG_3668" src="https://github.com/user-attachments/assets/e8d939cc-30f0-49f9-9da2-158657293a96" />
+)
 
 ## ✨ Features
 
