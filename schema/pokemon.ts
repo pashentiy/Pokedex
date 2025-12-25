@@ -1,5 +1,26 @@
 import { z } from "zod";
 
+export const PokemonTypeNameSchema = z.enum([
+  "Bug",
+  "Dark",
+  "Dragon",
+  "Electric",
+  "Fairy",
+  "Fighting",
+  "Fire",
+  "Flying",
+  "Ghost",
+  "Grass",
+  "Ground",
+  "Ice",
+  "Normal",
+  "Poison",
+  "Psychic",
+  "Rock",
+  "Steel",
+  "Water",
+]);
+
 export const PokemonSchema = z.object({
   id: z.number(),
   number: z.number(),
@@ -28,11 +49,16 @@ export const PaginationSchema = z.object({
   totalPages: z.number(),
   hasMore: z.boolean(),
   order: z.enum(["asc", "desc"]),
+  type: PokemonTypeNameSchema.nullable(),
 });
 
 export const PaginatedPokemonsResponseSchema = z.object({
   data: PokemonsSchema,
   pagination: PaginationSchema,
+});
+
+export const PokemonTypesResponseSchema = z.object({
+  types: z.array(PokemonTypeNameSchema),
 });
 
 export type PokemonWithImage = z.infer<typeof PokemonWithImageSchema>;

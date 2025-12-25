@@ -3,35 +3,45 @@ import { ActivityIndicator, FlatList, StyleSheet } from "react-native";
 
 import { SortDropdown } from "@/components/SortDropdown";
 import { View } from "@/components/Themed";
+import { TypeDropdown } from "@/components/TypeDropdown";
 import { PokemonCard } from "@/components/pokemon/PokemonCard";
 import { PokemonError } from "@/components/pokemon/PokemonError";
 import { PokemonLoading } from "@/components/pokemon/PokemonLoading";
 import { useInfinitePokemons } from "@/hooks/useInfinitePokemons";
+import { usePokemonTypes } from "@/hooks/usePokemonTypes";
 import { useRestoreInfiniteListPosition } from "@/hooks/useRestoreInfiniteListPosition";
 import { PokemonWithImage } from "@/schema/pokemon";
-import { PokemonListOrder } from "@/types";
+import { PokemonListOrder, PokemonType } from "@/types";
 import {
   getOrder,
+  getType,
   removeLastPage,
   removeScrollPosition,
   saveOrder,
   saveScrollPosition,
+  saveType,
 } from "@/utils/scrollPersistence";
 
 export default function TabOneScreen() {
   const [order, setOrder] = useState<PokemonListOrder>("asc");
+  const [type, setType] = useState<PokemonType>(null);
   const [isOrderLoaded, setIsOrderLoaded] = useState(false);
+  const [isTypeLoaded, setIsTypeLoaded] = useState(false);
+
+  const { data: typesData, isLoading: isTypesLoading } = usePokemonTypes();
 
   useEffect(() => {
     (async () => {
-      const savedOrder = await getOrder();
+      const [savedOrder, savedType] = await Promise.all([getOrder(), getType()]);
       setOrder(savedOrder);
+      setType(savedType);
       setIsOrderLoaded(true);
+      setIsTypeLoaded(true);
     })();
   }, []);
 
   const { data, isLoading, isError, error, fetchNextPage, hasNextPage, isFetchingNextPage } =
-    useInfinitePokemons(order);
+    useInfinitePokemons(order, type);
 
   const allPokemons: PokemonWithImage[] = data?.pages.flatMap((page) => page.data) ?? [];
 
@@ -51,12 +61,20 @@ export default function TabOneScreen() {
     setOrder(newOrder);
   };
 
+  const handleTypeChange = async (newType: PokemonType) => {
+    await removeScrollPosition();
+    await removeLastPage();
+    await saveType(newType);
+    listRef.current?.scrollToOffset({ offset: 0, animated: false });
+    setType(newType);
+  };
+
   const handleScroll = (event: any) => {
     const offset = event.nativeEvent.contentOffset.y;
     saveScrollPosition(offset);
   };
 
-  if (!isOrderLoaded || isLoading) {
+  if (!isOrderLoaded || !isTypeLoaded || isLoading) {
     return <PokemonLoading />;
   }
 
@@ -76,7 +94,15 @@ export default function TabOneScreen() {
 
   return (
     <View style={styles.container}>
-      <SortDropdown order={order} onOrderChange={handleOrderChange} />
+      <View style={styles.filtersContainer}>
+        <SortDropdown order={order} onOrderChange={handleOrderChange} />
+        <TypeDropdown
+          type={type}
+          types={typesData || []}
+          onTypeChange={handleTypeChange}
+          isLoading={isTypesLoading}
+        />
+      </View>
       <FlatList
         ref={listRef}
         data={allPokemons}
@@ -101,6 +127,11 @@ export default function TabOneScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+  },
+  filtersContainer: {
+    flexDirection: "row",
+    flexWrap: "wrap",
+    gap: 8,
   },
   footer: {
     paddingVertical: 20,
