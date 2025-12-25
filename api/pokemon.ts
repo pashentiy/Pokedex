@@ -3,12 +3,14 @@ import {
   PaginatedPokemonsResponseSchema,
   PaginatedPokemonsWithImageResponse,
 } from "@/schema/pokemon";
+import { PokemonListOrder } from "@/types";
 
 export async function fetchPokemonsPaginated(
   page: number,
   limit: number = 30,
+  order: PokemonListOrder,
 ): Promise<PaginatedPokemonsWithImageResponse> {
-  const url = createApiUrl(`/pokemon?page=${page}&limit=${limit}`);
+  const url = createApiUrl(`/pokemon?page=${page}&limit=${limit}&order=${order}`);
   const response = await fetch(url);
 
   if (!response.ok) {

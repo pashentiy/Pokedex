@@ -27,6 +27,7 @@ export const PaginationSchema = z.object({
   total: z.number(),
   totalPages: z.number(),
   hasMore: z.boolean(),
+  order: z.enum(["asc", "desc"]),
 });
 
 export const PaginatedPokemonsResponseSchema = z.object({

@@ -1,17 +1,39 @@
+import { useEffect, useState } from "react";
 import { ActivityIndicator, FlatList, StyleSheet } from "react-native";
 
+import { SortDropdown } from "@/components/SortDropdown";
+import { View } from "@/components/Themed";
 import { PokemonCard } from "@/components/pokemon/PokemonCard";
 import { PokemonError } from "@/components/pokemon/PokemonError";
 import { PokemonLoading } from "@/components/pokemon/PokemonLoading";
-import { View } from "@/components/Themed";
 import { useInfinitePokemons } from "@/hooks/useInfinitePokemons";
 import { useRestoreInfiniteListPosition } from "@/hooks/useRestoreInfiniteListPosition";
 import { PokemonWithImage } from "@/schema/pokemon";
-import { saveScrollPosition } from "@/utils/scrollPersistence";
+import { PokemonListOrder } from "@/types";
+import {
+  getOrder,
+  removeLastPage,
+  removeScrollPosition,
+  saveOrder,
+  saveScrollPosition,
+} from "@/utils/scrollPersistence";
 
 export default function TabOneScreen() {
+  const [order, setOrder] = useState<PokemonListOrder>("asc");
+  const [isOrderLoaded, setIsOrderLoaded] = useState(false);
+
+  useEffect(() => {
+    (async () => {
+      const savedOrder = await getOrder();
+      setOrder(savedOrder);
+      setIsOrderLoaded(true);
+    })();
+  }, []);
+
   const { data, isLoading, isError, error, fetchNextPage, hasNextPage, isFetchingNextPage } =
-    useInfinitePokemons();
+    useInfinitePokemons(order);
+
+  const allPokemons: PokemonWithImage[] = data?.pages.flatMap((page) => page.data) ?? [];
 
   const { listRef } = useRestoreInfiniteListPosition({
     pagesCount: data?.pages.length ?? 0,
@@ -21,12 +43,20 @@ export default function TabOneScreen() {
     fetchNextPage,
   });
 
+  const handleOrderChange = async (newOrder: PokemonListOrder) => {
+    await removeScrollPosition();
+    await removeLastPage();
+    await saveOrder(newOrder);
+    listRef.current?.scrollToOffset({ offset: 0, animated: false });
+    setOrder(newOrder);
+  };
+
   const handleScroll = (event: any) => {
     const offset = event.nativeEvent.contentOffset.y;
     saveScrollPosition(offset);
   };
 
-  if (isLoading) {
+  if (!isOrderLoaded || isLoading) {
     return <PokemonLoading />;
   }
 
@@ -34,8 +64,6 @@ export default function TabOneScreen() {
     const message = error instanceof Error ? error.message : "Unknown error";
     return <PokemonError message={message} />;
   }
-
-  const allPokemons: PokemonWithImage[] = data?.pages.flatMap((page) => page.data) ?? [];
 
   const renderFooter = () => {
     if (!isFetchingNextPage) return null;
@@ -48,6 +76,7 @@ export default function TabOneScreen() {
 
   return (
     <View style={styles.container}>
+      <SortDropdown order={order} onOrderChange={handleOrderChange} />
       <FlatList
         ref={listRef}
         data={allPokemons}

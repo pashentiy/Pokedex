@@ -1,5 +1,5 @@
 import { Link } from "expo-router";
-import { Image, Pressable, StyleSheet } from "react-native";
+import { Image, Pressable, StyleSheet, Text } from "react-native";
 
 import { View } from "@/components/Themed";
 import { PokemonWithImage } from "@/schema/pokemon";
@@ -16,6 +16,8 @@ export function PokemonCard({ pokemon }: PokemonCardProps) {
       <Pressable style={styles.container}>
         <View style={styles.imageContainer}>
           <Image source={{ uri: imageUrl }} style={styles.image} resizeMode="contain" />
+          <Text style={styles.textNumber}>#{pokemon.number}</Text>
+          <Text style={styles.textPokemonName}>{pokemon.name}</Text>
         </View>
       </Pressable>
     </Link>
@@ -41,6 +43,15 @@ const styles = StyleSheet.create({
     alignItems: "center",
     backgroundColor: "#f5f5f5",
     borderRadius: 12,
+  },
+  textNumber: {
+    textAlign: "center",
+    fontWeight: "bold",
+  },
+  textPokemonName: {
+    textAlign: "center",
+    fontSize: 9,
+    fontWeight: "bold",
   },
   image: {
     width: "80%",
